@@ -4,13 +4,13 @@
 
 - [Getting started](getting-started.md)
 
-- Raspberry Pi OS Configuration
+- [Raspberry Pi OS Configuration](raspberry-pi-os-configuration.md)
 
 - The config.txt file
 
 - Legacy config.txt options
 
-- The Linux kernel
+- [The Linux kernel](the-linux-kernel.md)
 
 - Remote access
 
