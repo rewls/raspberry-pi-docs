@@ -130,7 +130,7 @@
 
     - Download the latest version from raspberrypi.com/software and run the installer.
 
-    - Install it from a terminal using your package manager.
+    - Install it from a terminal using your package manager, e.g. `sudo pacman -S rpi-imager`
 
 - Once you’ve installed Imager, launch the application by running rpi-imager.
 
