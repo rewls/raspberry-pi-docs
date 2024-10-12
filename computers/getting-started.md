@@ -30,6 +30,7 @@
 |-|-|-|
 |Raspberry Pi 5|5V/5A, 5V/3A limits peripherals to 600mA|27W USB-C power supply|
 |Raspberry Pi 4 Model B|5V/3A|15W USB-C power supply|
+|Raspberry Pi Zero (all models)|5V/2.5A|12.5W Micro USB power supply|
 
 - Plug your power supply into the port marked "POWER IN","PWR IN", or "PWR".
 
@@ -55,6 +56,10 @@
 
 - Capacities above 2TB are currently not supported due  to limitations in the MBR.
 
+- Because of a hardward limitation, the following devices will only boot from a boot partition of 256GB or less:
+
+    - Raspberry Pi Zero
+
 ### Keyboard
 
 - You can use any of the USB ports on your Raspberry Pi to connect a wired keyboard or USB Bluetooth receiver.
@@ -71,6 +76,7 @@
 |-|-|
 |Raspberry Pi 5|2x micro HDMI|
 |Raspberry Pi 4 (all models)|2x micro HDMI, audio and composite out via 3.5mm TRRS jack|
+|Raspberry Pi Zero (all models)|mini HDMI|
 
 - If your Raspberry Pi has more then one HDMI port, plug your primary monitor into the port marked `HDMI0`.
 
@@ -91,6 +97,8 @@
     - Raspberry Pi 5
 
     - Raspberry Pi 4
+
+    - Raspberry Pi Zero W
 
 - The "Model B" suffix indicates variants with an Ethernet port; "Model A" indicates no Ethernet port.
 
