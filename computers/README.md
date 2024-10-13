@@ -4,9 +4,11 @@
 
 - [Getting started](getting-started.md)
 
-- [Raspberry Pi OS Configuration](raspberry-pi-os-configuration.md)
+- [Raspberry Pi OS](raspberry-pi-os.md)
 
-- The config.txt file
+- [Configuration](configuration.md)
+
+- [config.txt](config-txt.md)
 
 - Legacy config.txt options
 
