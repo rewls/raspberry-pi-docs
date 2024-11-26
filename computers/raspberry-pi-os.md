@@ -8,33 +8,49 @@
 
 - We recommend Raspberry Pi OS for most Raspberry Pi use cases.
 
+<br>
+
 - Because Raspberry Pi OS is derived from Debian, it follows a staggered version of the Debian release cycle.
 
 - Releases happen roughly every 2 years.
+
+<br>
 
 - The latest version of Raspberry Pi OS is based on Debian Bookworm.
 
 - The previous version was based on Debian Bullseye.
 
+<br>
+
+- You can find images of Raspberry Pi OS at raspberrypi.com/software/operating-systems/
+
 ## Update software
 
+- Always keep the software running on your Raspberry Pi updated to the latest version.
+
+- This keeps your device secure from vulnerabilities and ensures that you get the latest bug fixes.
+
 ### Manage software packages with APT
+
+- Advanced Package Tool (APT) is the recommended way to install, update, and remove software in Raspberry Pi OS.
+
+- You can access APT through the `apt` CLI.
 
 #### Install updates
 
 - `apt` stores a list of software sources in a file at `/etc/apt/sources.list`.
 
-- Before installing software, run the following command to update your local list of packages using `/etc/apt/sources.list`:
+- Before installing software, run the following command to **update** your local list of packages using `/etc/apt/sources.list`:
 
-```shell
-$ sudo apt update
-```
+    ```shell
+    $ sudo apt update
+    ```
 
-- Run the following command to upgrade all your installed packages to their latest versions:
+- Run the following command to **upgrade** all your installed packages to their latest versions:
 
-```shell
-$ sudo apt full-upgrade
-```
+    ```shell
+    $ sudo apt full-upgrade
+    ```
 
 > ##### Tip
 >
@@ -42,7 +58,11 @@ $ sudo apt full-upgrade
 >
 > - As a result, package dependencies sometimes change, so you should always use `full-upgrade` instead of the standard `upgrade`.
 
+- Run these commands regularly to keep your software up-to-date.
+
 - Using `apt` to keep Raspberry Pi OS up to date also keeps your Linux kernel and firmware up to date, since Raspberry Pi distributes them as Debian packages.
+
+<br>
 
 - When Raspberry Pi releases a new major version of Raspberry Pi OS, the above commands won’t upgrade your operating system to that new major version.
 
@@ -52,44 +72,54 @@ $ sudo apt full-upgrade
 
 - To search the archives for a package, pass a search keyword to `apt-cache search`:
 
-```shell
-$ apt-cache search <keyword>
-```
+    ```shell
+    $ apt-cache search <keyword>
+    ```
+
+- The search returns multiple packages with names or descriptions that included the keyword.
+
+<br>
 
 - Use the following command to view detailed information about a package:
 
-```shell
-$ apt-cache show <package-name>
-```
+    ```shell
+    $ apt-cache show <package-name>
+    ```
 
 - Use this command to verify that the maintainer, version, and size match your expectations for a package.
 
 #### Install a package
 
-```shell
-$ sudo apt install <package-name>
-```
+- To install a package on your Raspberry Pi, pass the name of the package to the following command:
+
+    ```shell
+    $ sudo apt install <package-name>
+    ```
 
 - `apt` will display the amount of disk space the package will consume.
 
 - Enter **Y** and press **Enter** to confirm installation of the package.
 
-- You can skip this confirmation step by adding the -y flag to the command above.
+- You can skip this confirmation step by adding the `-y` flag to the command above.
 
 #### Uninstall a package
 
-```shell
-sudo apt remove <package-name>
-```
+- To uninstall a package from your Raspberry Pi, pass the name of the package to the following command:
 
-> ##### TIP
->
-> - To completely remove all traces of the package, including configuration files, use `purge` instead of `remove`.
+
+    ```shell
+    sudo apt remove <package-name>
+    ```
+
+    > ##### TIP
+    >
+    > - To completely remove all traces of the package, including configuration files, use `purge` instead of `remove`.
 
 - `apt` will display the amount of disk space removing the package will free up.
 
 - Enter **Y** and press **Enter** to confirm installation of the package.
-You can skip this confirmation step by adding the -y flag to the command above.
+
+- You can skip this confirmation step by adding the `-y` flag to the command above.
 
 #### Manage `apt` disk usage
 
@@ -97,19 +127,19 @@ You can skip this confirmation step by adding the -y flag to the command above.
 
 - To check that you have enough free disk space, run the following command:
 
-```shell
-$ df -h
-```
+    ```sh
+    $ df -h
+    ```
 
-- `apt` stores downloaded package (.deb) files in `/var/cache/apt/archives`.
+- `apt` stores downloaded package (`.deb`) files in `/var/cache/apt/archives`.
 
 - During installation, `apt` downloads these packages, then copies files from the packages to the correct installation locations.
 
 - To delete any lingering package files, run the following command:
 
-```shell
-$ sudo apt clean
-```
+    ```shell
+    $ sudo apt clean
+    ```
 
 ### Upgrade your operating system to a new major version
 
@@ -135,9 +165,13 @@ $ sudo apt clean
 >
 > - Do not use `rpi-update` on any system unless recommended to do so by a Raspberry Pi engineer.
 >
-> - It could leave your system unreliable or broken. Do not use `rpi-update` as part of any regular update process.
+> - It could leave your system unreliable or broken.
+>
+> - Do not use `rpi-update` as part of any regular update process.
 
 - To update the firmware on your Raspberry Pi to the latest version, use `rpi-update`.
+
+<br>
 
 - `rpi-update` downloads the latest pre-release version of the Linux kernel, its matching modules, device tree files, and the latest versions of the VideoCore firmware.
 
@@ -151,23 +185,29 @@ $ sudo apt clean
 
 - Once the update is complete, reboot your Raspberry Pi for these changes to take effect:
 
-```shell
-$ sudo rpi-update
-$ sudo reboot
-```
+    ```sh
+    $ sudo rpi-update
+    $ sudo reboot
+    ```
 
 ### Downgrade firmware to the last stable release
 
 - If you update your firmware to the latest release and experience an issue, use the following command to return to the last stable firmware release:
 
-```shell
-$ sudo apt-get update
-$ sudo apt install --reinstall raspi-firmware
-```
+    ```sh
+    $ sudo apt-get update
+    $ sudo apt install --reinstall raspi-firmware
+    ```
 
 > ##### Note
 >
-> - If you still run Raspberry Pi OS Bullseye, you must instead reinstall raspberrypi-kernel using the following command:
+> - If you still run Raspberry Pi OS Bullseye, you must instead reinstall `raspberrypi-kernel` using the following command:
+>
+> ```sh
+> $ sudo apt install --reinstall libraspberrypi0 libraspberrypi-{bin,dev,doc} raspberrypi-{kernel,bootloader}
+> ```
+>
+> - Reboot your Raspberry Pi with `sudo reboot` to put these changes into effect.
 
 ## Play audio and video
 
@@ -181,48 +221,58 @@ $ sudo apt install --reinstall raspi-firmware
 
 #### `vlc` CLI
 
-```shell
-$ wget --trust-server-names http://rptl.io/big-buck-bunny
-$ vlc big-buck-bunny-1080p.mp4
-```
+- You can also launch VLC from the command line.
 
-- To prevent the VLC GUI staying open after your file has finished playing, add the --play-and-exit flag:
+- For the examples below, we used a short clip from Big Buck Bunny.
 
-- To prevent the VLC GUI staying open after your file has finished playing, add the --play-and-exit flag:
+- To download this clip from Raspberry Pi, run the following command:
 
-```shell
-$ vlc --play-and-exit big-buck-bunny-1080p.mp4
-```
+    ```sh
+    $ wget --trust-server-names http://rptl.io/big-buck-bunny
+    ```
 
-- To play a video in fullscreen mode (which can result in smoother playback in some circumstances), add the --fullscreen flag:
+- To play the clip in VLC from the command line, run the following command:
 
-```shell
-$ vlc --play-and-exit --fullscreen big-buck-bunny-1080p.mp4
-```
+    ```sh
+    $ vlc big-buck-bunny-1080p.mp4
+    ```
 
-#### Use cvlc to play media without a GUI
+- To prevent the VLC GUI staying open after your file has finished playing, add the `--play-and-exit` flag:
 
-- If you use cvlc instead of vlc with any of these commands, then the VLC GUI won’t be shown:
+    ```sh
+    $ vlc --play-and-exit big-buck-bunny-1080p.mp4
+    ```
 
-```shell
-$ cvlc --play-and-exit big-buck-bunny-1080p.mp4
-```
+- To play a video in fullscreen mode (which can result in smoother playback in some circumstances), add the `--fullscreen` flag:
+
+    ```sh
+    $ vlc --play-and-exit --fullscreen big-buck-bunny-1080p.mp4
+    ```
+
+#### Use `cvlc` to play media without a GUI
+
+- If you use `cvlc` instead of `vlc` with any of these commands, then the VLC GUI won’t be shown:
+
+    ```shell
+    $ cvlc --play-and-exit big-buck-bunny-1080p.mp4
+    ```
 
 ### Specify an audio output device
 
-- To force audio output to a particular device, pass the alsa value to the -A option to use ALSA audio output, and the --alsa-audio-device option to specify an audio output device:
+- To force audio output to a particular device, pass the `alsa` value to the `-A` option to use ALSA audio output, and the `--alsa-audio-device` option to specify an audio output device:
 
-```shell
-$ cvlc --play-and-exit -A alsa --alsa-audio-device <alsa-device> computer-startup-music.mp3
-```
+    ```sh
+    $ cvlc --play-and-exit -A alsa --alsa-audio-device <alsa-device> computer-startup-music.mp3
+    ```
 
-- Replace the <alsa-device> placeholder with one of the following options:
+- Replace the `<alsa-device>` placeholder with one of the following options:
 
-|ALSA device|Description|
-|-|-|
-|`sysdefault:CARD=Headphones`|The headphone jack|
-|`sysdefault:CARD=vc4hdmi0`|The HDMI0 output on a Raspberry Pi 4, 5, 400, or Compute Module 4|
-|`sysdefault:CARD=vc4hdmi1`|The HDMI1 output on a Raspberry Pi 4, 5, 400, or Compute Module 4|
+    |ALSA device|Description|
+    |-|-|
+    |`sysdefault:CARD=Headphones`|The headphone jack|
+    |`sysdefault:CARD=vc4hdmi`|The HDMI output on a Raspberry Pi Zero, or Raspberry Pi Model 1, 2 or 3|
+    |`sysdefault:CARD=vc4hdmi0`|The HDMI0 output on a Raspberry Pi 4, 5, 400, or Compute Module 4|
+    |`sysdefault:CARD=vc4hdmi1`|The HDMI1 output on a Raspberry Pi 4, 5, 400, or Compute Module 4|
 
 > ##### TIP
 >
@@ -231,12 +281,6 @@ $ cvlc --play-and-exit -A alsa --alsa-audio-device <alsa-device> computer-startu
 > ```shell
 > $ aplay -L | grep sysdefault
 > ```
-
-### Improve stream playback performance
-
-- If you have a raw H.264 stream, like those captured from a Raspberry Pi Camera Module, you can improve playback performance in VLC by wrapping the stream inside a container format such as MP4.
-
-- You can use `ffmpeg` to convert stream content into a container file.
 
 ## Utilities
 
@@ -282,16 +326,16 @@ $ cvlc --play-and-exit -A alsa --alsa-audio-device <alsa-device> computer-startu
 
 - A bit being set indicates the following meanings:
 
-|Bit|Hexadecimal value|Meaning|
-|-|-|-|
-|0|`0x1`|Undervoltage detected|
-|1|`0x2`|Arm frequency capped|
-|2|`0x4`|Currently throtlled|
-|3|`0x8`|Soft temperature limit active|
-|16|`0x10000`|Undervoltage has occurred|
-|17|`0x20000`|Arm frequency capping has ocurred|
-|18|`0x40000`|Throttling has occurred|
-|19|`0x80000`|Soft temperature limit has occurred|
+    |Bit|Hexadecimal value|Meaning|
+    |-|-|-|
+    |0|`0x1`|Undervoltage detected|
+    |1|`0x2`|Arm frequency capped|
+    |2|`0x4`|Currently throtlled|
+    |3|`0x8`|Soft temperature limit active|
+    |16|`0x10000`|Undervoltage has occurred|
+    |17|`0x20000`|Arm frequency capping has ocurred|
+    |18|`0x40000`|Throttling has occurred|
+    |19|`0x80000`|Soft temperature limit has occurred|
 
 #### `measure_temp`
 
@@ -305,24 +349,26 @@ $ cvlc --play-and-exit -A alsa --alsa-audio-device <alsa-device> computer-startu
 
 - Accepts the following clock values:
 
-|clock|Description|
-|-|-|
-|`arm`|ARM core(s)|
-|`core`|GPU core|
-|`h264`|H.264 block|
-|`isp`|Image Sensor Pipeline|
-|`v3d`|3D block|
-|`uart`|UART|
-|`pwm`|PWM block (analogue audio output)|
-|`emmc`|SD card interface
-|`pixel`|Pixel valves|
-|`vec`|Analogue video encodier|
-|`hdmi`|HDMI|
-|`dpi`|Display Parallel Interface|
+    |clock|Description|
+    |-|-|
+    |`arm`|ARM core(s)|
+    |`core`|GPU core|
+    |`h264`|H.264 block|
+    |`isp`|Image Sensor Pipeline|
+    |`v3d`|3D block|
+    |`uart`|UART|
+    |`pwm`|PWM block (analogue audio output)|
+    |`emmc`|SD card interface
+    |`pixel`|Pixel valves|
+    |`vec`|Analogue video encodier|
+    |`hdmi`|HDMI|
+    |`dpi`|Display Parallel Interface|
 
 #### `measure_volts [block]`
 
-- Displays the current voltages used by the specific block. Accepts the following block values:
+- Displays the current voltages used by the specific block.
+
+- Accepts the following block values:
 
 |block|Description|
 |-|-|
@@ -343,9 +389,9 @@ $ cvlc --play-and-exit -A alsa --alsa-audio-device <alsa-device> computer-startu
 
 - For example, the following command returns the total memory on the device in megabytes:
 
-```shell
-$ vcgencmd get_config total_mem
-```
+    ```sh
+    $ vcgencmd get_config total_mem
+    ```
 
 #### `get_mem type`
 
@@ -385,11 +431,19 @@ $ vcgencmd get_config total_mem
 
 - When you install third-party Python libraries, always use the correct package-management tools.
 
+<br>
+
 - On Linux, you can install python dependencies in two ways:
 
-    - use apt to install pre-configured system packages
+    - use `apt` to install pre-configured system packages
 
-    - use pip to install libraries using Python’s dependency manager in a virtual environment
+    - use `pip` to install libraries using Python’s dependency manager in a virtual environment
+
+> ##### Important
+>
+> - Starting in Raspberry Pi OS Bookworm, you can only use `pip` to install into a Python Virtual Environment (`venv`).
+>
+> - This change was introduced by the Python community, not by Raspberry Pi: for more information, see PEP 668.
 
 ### Install Python packages using apt
 
@@ -401,86 +455,142 @@ $ vcgencmd get_config total_mem
 
 - And `apt` ensures that you don’t break other packages if you uninstall.
 
-## GPIO and the 40-pin header
+### Install Python libraries using pip
 
-- A 40-pin GPIO header is found on all current Raspberry Pi boards, although it is unpopulated on Raspberry Pi Zero, Raspberry Pi Zero W, and Raspberry Pi Zero 2 W.
+#### Bookworm changes to `pip` installation
 
-- The GPIO headers on all boards have a 0.1in (2.54mm) pin pitch.
+- In older versions of Raspberry Pi OS, you could install libraries directly into the system version of Python using `pip`.
 
-![GPIO-Pinout-Diagram-2](/images/GPIO-Pinout-Diagram-2.png)
+- Since Raspberry Pi OS Bookworm, users cannot install libraries directly into the system version of Python.
 
-![GPIO](/images/GPIO.png)
+<br>
 
-> ##### Note
+- Instead, install libraries into a virtual environment (`venv`).
+
+- To install a library at the system level for all users, install it with `apt`.
+
+<br>
+
+- Attempting to install a Python package system-wide outputs an error similar to the following:
+
+```sh
+$ pip install buildhat
+error: externally-managed-environment
+
+× This environment is externally managed
+To install Python packages system-wide, try apt install
+  python3-xyz, where xyz is the package you are trying to
+  install.
+
+  If you wish to install a non-Debian-packaged Python package,
+  create a virtual environment using python3 -m venv path/to/venv.
+  Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+  sure you have python3-full installed.
+
+  For more information visit http://rptl.io/venv
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+```
+
+- Python users have long dealt with conflicts between OS package managers like `apt` and Python-specific package management tools like `pip`.
+
+- These conflicts include both Python-level API incompatibilities and conflicts over file ownership.
+
+<br>
+
+- Starting in Raspberry Pi OS Bookworm, packages installed via `pip` *must be installed into a Python virtual environment* (`venv`).
+
+- A virtual environment is a container where you can safely install third-party modules so they won’t interfere with your system Python.
+
+#### Use `pip` with virtual environments
+
+- To use a virtual environment, create a container to store the environment.
+
+- There are several ways you can do this depending on how you want to work with Python:
+
+##### per-project environments
+
+- Many users create separate virtual environments for each Python project.
+
+- Locate the virtual environment in the root folder of each project, typically with a shared name like `env`.
+
+- Run the following command from the root folder of each project to create a virtual environment configuration folder:
+
+    ```sh
+    $ python -m venv env
+    ```
+
+- Before you work on a project, run the following command from the root of the project to start using the virtual environment:
+
+    ```sh
+    $ source env/bin/activate
+    ```
+
+- You should then see a prompt similar to the following:
+
+    ```sh
+    (env) $
+    ```
+
+- When you finish working on a project, run the following command from any directory to leave the virtual environment:
+
+    ```sh
+    (env) $ deactivate
+    ```
+
+##### Create a virtual environment
+
+- Run the following command to create a virtual environment configuration folder, replacing `<env-name>` with the name you would like to use for the virtual environment (e.g. `env`):
+
+    ```sh
+    $ python -m venv <env-name>
+    ```
+
+> ##### Tip
 >
-> - The GPIO pin numbering scheme is not in numerical order.
->
-> - GPIO pins 0 and 1 are present on the board (physical pins 27 and 28), but are reserved for advanced use.
+> - Pass the `--system-site-packages` flag before the folder name to preload all of the currently installed packages in your system Python installation into the virtual environment.
 
-### Voltages
+##### Enter a virtual environment
 
-- Two 5V pins and two 3.3V pins are present on the board, as well as a number of ground pins (GND), which can not be reconfigured. The remaining pins are all general-purpose 3.3V pins, meaning outputs are set to 3.3V and inputs are 3.3V-tolerant.
+- Then, execute the `bin/activate` script in the virtual environment configuration folder to enter the virtual environment:
 
-### Outputs
+    ```sh
+    $ source <env-name>/bin/activate
+    ```
 
-- A GPIO pin designated as an output pin can be set to high (3.3V) or low (0V).
+- You should then see a prompt similar to the following:
 
-### Inputs
+    ```sh
+    (<env-name>) $
+    ```
 
-- A GPIO pin designated as an input pin can be read as high (3.3V) or low (0V).
+- The `(<env-name>)` command prompt prefix indicates that the current terminal session is in a virtual environment named `<env-name>`.
 
-- This is made easier with the use of internal pull-up or pull-down resistors.
+<br>
 
-- Pins GPIO2 and GPIO3 have fixed pull-up resistors, but for other pins this can be configured in software.
+- To check that you’re in a virtual environment, use `pip list` to view the list of installed packages:
 
-### Other GPIO functions
+    ```sh
+    (<env-name>) $ pip list
+    Package    Version
+    ---------- -------
+    pip        23.0.1
+    setuptools 66.1.1
+    ```
 
-- Some functions are available on all pins, others on specific pins:
+- The list should be much shorter than the list of packages installed in your system Python.
 
-    - PWM (pulse-width modulation)
+- You can now safely install packages with `pip`.
 
-        - Software PWM available on all pins
+- Any packages you install with `pip` while in a virtual environment only install to that virtual environment.
 
-        - Hardware PWM available on GPIO12, GPIO13, GPIO18, GPIO19
+- In a virtual environment, the `python` or `python3` commands automatically use the virtual environment’s version of Python and installed packages instead of the system Python.
 
-    - SPI
+##### Exit a virtual environment
 
-        - SPI0: MOSI (GPIO10); MISO (GPIO9); SCLK (GPIO11); CE0 (GPIO8), CE1 (GPIO7)
+- To leave a virtual environment, run the following command:
 
-        - SPI1: MOSI (GPIO20); MISO (GPIO19); SCLK (GPIO21); CE0 (GPIO18); CE1 (GPIO17); CE2 (GPIO16)
-
-    - I2C
-
-        - Data: (GPIO2); Clock (GPIO3)
-
-        - EEPROM Data: (GPIO0); EEPROM Clock (GPIO1)
-
-    - Serial
-
-        - TX (GPIO14); RX (GPIO15)
-
-### View a GPIO pinout for your Raspberry Pi
-
-- A GPIO reference can be accessed on your Raspberry Pi by opening a terminal window and running the command pinout.
-
-- This tool is provided by the GPIO Zero Python library, which is installed by default in Raspberry Pi OS.
-
-> ##### Warning
->
-> - While connecting simple components to GPIO pins is safe, be careful how you wire things up.
->
-> - LEDs should have resistors to limit the current passing through them.
->
-> - Do not use 5V for 3.3V components.
->
-> - Do not connect motors directly to the GPIO pins, instead use an H-bridge circuit or a motor controller board.
-
-### Permissions
-
-- In order to use the GPIO ports, your user must be a member of the gpio group.
-
-- The default user account is a member by default, but you must add other users manually using the following command:
-
-    ```shell
-    $ sudo usermmod -a -G gpio <username>
+    ```sh
+    (<env-name>) $ deactivate
     ```
