@@ -100,6 +100,46 @@ $ sudo nano /boot/firmware/cmdline.txt
 
 - Some wireless adapters and some Raspberry Pi boards do not support 5GHz networks; check the documentation for your wireless module to ensure compatibility with your preferred network.
 
+### Remote access
+
+- With no keyboard or monitor, you need a way to remotely control your headless Raspberry Pi.
+
+- On first boot, the only option is SSH.
+
+- To enable SSH on a fresh installation of Raspberry Pi OS, choose one of the following methods:
+
+    - enable SSH in the OS customisation menu in Raspberry Pi Imager, then enter a username and password
+
+    - create a file named `ssh` at the root of the first partition of the SD card (labeled `bootfs`), then configure a user manually with `userconf.txt` following the instructions in the section below
+
+- For more information, see set up an SSH server.
+
+- Once you’ve connected over SSH, you can use `raspi-config` to enable VNC if you’d prefer a graphical desktop environment.
+
+#### Configure a user manually
+
+- At the root of the first partion of your SD card (the filesystem labeled `bootfs`), create a file named `userconf.txt`.
+
+<br>
+
+- This file should contain a single line of text, consisting of `<username>:<password>`: your desired username, followed immediately by a colon, followed immediately by an **encrypted** representation of the password you want to use.
+
+> ##### Note
+>
+> - ` <username>` must only contain lower-case letters, digits and hyphens, and must start with a letter.
+>
+> - It may not be longer than 31 characters.
+
+- To generate the encrypted password, use OpenSSL on another computer.
+
+- Open a terminal and enter the following:
+
+    ```sh
+    $ openssl passwd -6
+    ```
+
+- When prompted, enter your password and verify it. This command will then output an encrypted version of the supplied password.
+
 ## `boot` folder contents
 
 - Raspberry Pi OS stores boot files on the first partition of the SD card, formatted with the FAT file system.
