@@ -1,5 +1,63 @@
 # Configuration
 
+## Kernel command line (`cmdline.txt`)
+
+- The Linux kernel accepts a collection of command line parameters during boot.
+
+- On the Raspberry Pi, this command line is defined in a file in the boot partition, called `cmdline.txt`.
+
+- You can edit this text file with any text editor.
+
+```sh
+$ sudo nano /boot/firmware/cmdline.txt
+```
+
+> ##### Important
+>
+> Put all parameters in `cmdline.txt` on the same line.
+>
+> - Do not use newlines.
+
+- To view the command line passed to the kernel at boot time, run the following command:
+
+    ```sh
+    $ cat /proc/cmdline
+    ```
+
+- Because Raspberry Pi firmware makes changes to the command line before launching the kernel, the output of this command will not exactly match the contents of `cmdline.txt`.
+
+### Command line options
+
+- There are many kernel command line parameters, some of which are defined by the kernel itself.
+
+- Others are defined by code that the kernel may be using, such as the Plymouth splash screen system.
+
+#### Standard entries
+
+- `console`
+
+    - defines the serial console.
+
+    - There are usually two entries:
+
+        - `console=serial0,115200`
+
+        - `console=tty1`
+
+- `root`
+
+    - defines the location of the root filesystem.
+
+    - e.g. `root=/dev/mmcblk0p2` means multimedia card block 0 partition 2.
+
+- `rootfstype`
+
+    - defines what type of filesystem the rootfs uses, e.g. `rootfstype=ext4`.
+
+- `quiet`
+
+    - sets the default kernel log level to `KERN_WARNING`, which suppresses all but very serious log messages during boot.
+
 ## Set up a headless Raspberry Pi
 
 - A **headless** Raspberry Pi runs without a monitor, keyboard, or mouse.
@@ -41,6 +99,160 @@
 - Your Raspberry Pi will use these credentials to connect to the network on first boot.
 
 - Some wireless adapters and some Raspberry Pi boards do not support 5GHz networks; check the documentation for your wireless module to ensure compatibility with your preferred network.
+
+## `boot` folder contents
+
+- Raspberry Pi OS stores boot files on the first partition of the SD card, formatted with the FAT file system.
+
+<br>
+
+- On startup, each Raspberry Pi loads various files from the boot partition in order to start up the various processors before the Linux kernel boots.
+
+<br>
+
+- On boot, Linux mounts the boot partition as `/boot/firmware/`.
+
+> ##### Note
+>
+> - Prior to *Bookworm*, Raspberry Pi OS stored the boot partition at `/boot/`.
+>
+> - Since *Bookworm*, the boot partition is located at `/boot/firmware/`.
+
+### `cmdline.txt`
+
+- The kernel command line passed into the kernel at boot.
+
+### `config.txt`
+
+- Contains many configuration parameters for setting up the Raspberry Pi.
+
+- For more information, see the `config.txt` documentation.
+
+> ##### Important
+>
+> - Raspberry Pi 5 requires a non-empty `config.txt` file in the boot partition.
+
+### Device Tree blob files (`*.dtb`)
+
+- Device tree blob files contain the hardware definitions of the various models of Raspberry Pi.
+
+- These files set up the kernel at boot based on the detected Raspberry Pi model.
+
+### Kernel files (`*.img`)
+
+- Various kernel image files that correspond to Raspberry Pi models:
+
+    |Filename|Processor|Raspberry Pi model|Notes|
+    |-|-|-|-|
+    |`kernel.img`|BCM2835|Pi Zero, Pi 1||
+
+> ##### Note
+>
+> - `lscpu` reports a CPU architecture of `armv7l` for systems running a 32-bit kernel, and `aarch64` for systems running a 64-bit kernel. The `l` in the `armv7l` case refers to little-endian CPU architecture, not `LPAE` as is indicated by the `l` in the `kernel7l.img` filename.
+
+## LED warning flash codes
+
+- If a Raspberry Pi fails to boot for some reason, or has to shut down, in many cases an LED will flash a specific number of times to indicate what happened.
+
+- The LED will blink for a number of long flashes (0 or more), then produce short flashes, to indicate the exact status.
+
+- In most cases, the pattern will repeat after a two-second gap.
+
+|Long flashes|Short flashes|Status|
+|-|-|-|
+|4|6|Power failure type A|
+|4|7|Power failure type B|
+
+## Configure UARTs
+
+- There are two types of UART available on the Raspberry Pi - PL011 and mini UART.
+
+- The PL011 is a capable, broadly 16550-compatible UART, while the mini UART has a reduced feature set.
+
+<br>
+
+- All UARTs on the Raspberry Pi are 3.3V only - damage will occur if they are connected to 5V systems.
+
+- An adapter can be used to connect to 5V systems.
+
+- Alternatively, low-cost USB to 3.3V serial adapters are available from various third parties.
+
+### Raspberry Pi Zero, 1, 2 and 3
+
+- The Raspberry Pi Zero, 1, 2, and 3 each contain two UARTs as follows:
+
+    |Name|Type|
+    |-|-|
+    |UART0|PL011|
+    |UART1|mini UART|
+
+### Primary UART
+
+- On the Raspberry Pi, one UART is selected to be present on GPIO 14 (transmit) and 15 (receive) - this is the primary UART.
+
+- By default, this will also be the UART on which a Linux console may be present.
+
+- Note that GPIO 14 is pin 8 on the GPIO header, while GPIO 15 is pin 10.
+
+### Secondary UART
+
+- The secondary UART is not normally present on the GPIO connector.
+
+- By default, the secondary UART is connected to the Bluetooth side of the combined wireless LAN/Bluetooth controller, on models which contain this controller.
+
+### Primary and Secondary UART
+
+- The following table summarises the assignment of UARTs on various Raspberry Pi devices:
+
+    |Model|Primary/console|Secondary/Bluetooth|
+    |-|-|-|
+    |Raspberry Pi Zero W|UART1|UART0|
+
+- Linux devices on Raspberry Pi OS:
+
+    |Linux device|Description|
+    |-|-|
+    |`/dev/ttyS0`|mini UART|
+    |`/dev/ttyAMA0`|first PL011 (UART0)|
+    |`/dev/serial0`|primary UART|
+    |`/dev/serial1`|secondary UART|
+
+- `/dev/serial0` and `/dev/serial1` are symbolic links which point to either `/dev/ttyS0` or `/dev/ttyAMA0`.
+
+- Due to changes in Bookworm, `/dev/serial1` does not exist by default.
+
+- You can re-enable `serial1` by setting the following values in `config.txt`:
+
+    ```
+    dtparam=krnbt=off
+    ```
+
+> ##### Tip
+>
+> - This option may not work on all models in the future.
+>
+> - Only use this option if there is no other alternative for your use case.
+
+### Enabling early console for Linux
+
+- Although the Linux kernel starts the UARTs relatively early in the boot process, it is still long after some critical bits of infrastructure have been set up.
+
+- A failure in those early stages can be hard to diagnose without access to the kernel log messages from that time.
+
+- To enable `earlycon` support for one of the UARTs, add one of the following options to `cmdline.txt`, depending on which UART is the primary:
+
+    - For Raspberry Pi 1, Pi Zero and Compute Module 1:
+
+        ```
+        earlycon=uart8250,mmio32,0x20215040
+        earlycon=pl011,mmio32,0x20201000
+        ```
+
+- The baudrate defaults to 115200bps.
+
+> ##### Note
+>
+> - Selecting the wrong early console can prevent the Raspberry Pi from booting.
 
 ## Device Trees, overlays, and parameters
 
