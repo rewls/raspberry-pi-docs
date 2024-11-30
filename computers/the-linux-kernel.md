@@ -52,7 +52,7 @@
 
 > ##### Tip
 >
-- The `git clone` command above downloads the current active branch, which we build Raspberry Pi OS images from, without any history.
+> - The `git clone` command above downloads the current active branch, which we build Raspberry Pi OS images from, without any history.
 >
 > - Omit `--depth=1` to download the entire repository, including the full history of all branches.
 >
@@ -120,6 +120,7 @@
         > # mkdir /opt/toolchain
         > # cd /opt/toolchain
         > # tar xfJ /path/to/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz
+        > # ln -s arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf/ arm-none-linux-gnueabihf
         > $ echo "export PATH=\"/opt/toolchain/arm-none-linux-gnueabihf/bin:$PATH\"" >> ~/.bashrc
         > ```
 
@@ -321,3 +322,47 @@ $ sudo mount /dev/sdb2 mnt/root
 > - Combine this approach with a custom LOCALVERSION to keep your custom kernel separate from the stock kernel image managed by the system.
 >
 > - With this arrangement, you can quickly revert to a stock kernel in the event that your kernel cannot boot.
+
+## Kernel headers
+
+- To compile a kernel module, you need the Linux kernel headers.
+
+- These provide the function and structure definitions required to compile code that interfaces with the kernel.
+
+<br>
+
+- If you cloned the entire kernel from GitHub, the headers are already included in the source tree.
+
+- If you don’t need all the extra files, you can instead install only the kernel headers with `apt`.
+
+> ##### Tip
+>
+> - When a new kernel is released, you need the headers that match that kernel version.
+>
+> - It can take several weeks to update the `apt` package to reflect the latest kernel version.
+>
+> - For the latest header versions, clone the kernel.
+
+- If you use a 64-bit version of Raspberry Pi OS, run the following command to install the kernel headers:
+
+    ```sh
+    $ sudo apt install linux-headers-rpi-v8
+    ```
+
+    > ##### Before Bookworm
+    >
+    > ```sh
+    > $ sudo apt install raspberrypi-kernel-headers
+    > ```
+
+- If you use a 32-bit version of Raspberry Pi OS, run the following command to install the kernel headers:
+
+    ```sh
+    $ sudo apt install linux-headers-rpi-{v6,v7,v7l}
+    ```
+
+> ##### Note
+>
+> - Installation can take several minutes.
+>
+> - There is no progress indicator.
