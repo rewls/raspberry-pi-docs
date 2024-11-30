@@ -1,5 +1,81 @@
 # Configuration
 
+## `raspi-config`
+
+> ##### Tip
+>
+> - Raspberry Pi Desktop users can access a graphical version of this application at **Preferences > Raspberry Pi Configuration**.
+>
+> - However, some advanced configuration is only available in `raspi-config`.
+
+- `raspi-config` helps you configure your Raspberry Pi.
+
+- Available options may differ between Raspberry Pi models.
+
+- To open the configuration tool, run the following command:
+
+    ```sh
+    $ sudo raspi-config
+    ```
+
+- You should see a blue screen with options in a grey box:
+
+    1. System Options: Configuresystem settings
+
+    2. Display Options: Configure display settings
+
+    3. Interface Options: Configure connections to peripherals
+
+    4. Performance Options: Configure performance settings
+
+    5. Localisation Options: Configure language and regional settings
+
+    6. Advanced Options: Configure advanced settings
+
+    7. Update: Update this tool to the latest version
+
+    8. About raspi-config: Information about this configuration tool
+
+- Use the **Up** and **Down** arrow keys to move the highlighted selection between the options available.
+
+<br>
+
+- Press the **Right** arrow key or press **Tab** to access the `<Select>` and `<Finish>` buttons.
+
+- Press **Left** or press **Tab** to return to the options.
+
+<br>
+
+- `raspi-config` automates edits to `/boot/firmware/config.txt` and various Linux configuration files.
+
+- Some options require a reboot to take effect.
+
+- If you changed any of these, `raspi-config` asks you to reboot when you exit.
+
+> ##### Tip
+>
+> - In long lists of option values (like the list of timezone cities), type a letter to skip to that section of the list.
+
+### Advanced options
+
+1. Expand Filesystem: Ensures that all of the SD card is available
+
+#### Expand filesystem
+
+- Expands your OS partition to fill the whole storage device, giving you more space to use for files.
+
+- Reboot your Raspberry Pi to complete this action.
+
+- Normally, Raspberry Pi OS runs this action on first boot.
+
+- This option can be useful if you clone your OS to a separate storage device with more capacity than the original.
+
+> ##### Warning
+>
+> - There is no confirmation step.
+>
+> - Selecting the option begins the partition expansion immediately.
+
 ## Kernel command line (`cmdline.txt`)
 
 - The Linux kernel accepts a collection of command line parameters during boot.
